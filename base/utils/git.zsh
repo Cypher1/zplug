@@ -53,7 +53,7 @@ __zplug::utils::git::clone()
                 --die \
                 --zplug \
                 --error \
-                "$repo is an invalid 'user/repo' format.\n"
+                "'$repo' is an invalid 'user/repo' format.\n"
             return 1
         fi
 

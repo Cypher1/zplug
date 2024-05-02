@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+# Description:
+#   Remote host to use
+
+local    arg="$1" package
+local -a parsed_zplugs
+local    host
+local    default="127.0.0.1"
+
+package="${arg}, ${zplugs[$arg]%, }"
+parsed_zplugs=(${(s/, /)package/,  */, })
+
+host="${parsed_zplugs[(k)host:*]#host:*}"
+if [[ -z $host ]]; then
+    zstyle -s ":zplug:tag" host host
+fi
+
+local from
+__zplug::core::core::run_interfaces \
+    'from' \
+    "$arg" \
+    | read from
+
+if [[ $from == "gitlab" ]]; then
+    # TODO: Support more hosts
+    default="gitlab.com"
+    if [[ -n $host ]]; then
+        host="$host"
+    fi
+fi
+
+echo "${host:-$default}"

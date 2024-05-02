@@ -16,6 +16,8 @@ __zplug::sources::gitlab::update()
 __zplug::sources::gitlab::get_url()
 {
     local repo="$1" url_format
+    local -A tags
+    tags[host]="$(__zplug::core::core::run_interfaces 'host' "$repo")"
 
     case "$ZPLUG_PROTOCOL" in
         HTTPS | https)
@@ -24,7 +26,7 @@ __zplug::sources::gitlab::get_url()
             ;;
         SSH | ssh)
             # git@gitlab.com:%s.git
-            url_format="git@gitlab.com:${repo}.git"
+            url_format="git@${tags[host]}:${repo}.git"
             ;;
     esac
 
